@@ -40,6 +40,9 @@
       // Set the default to be closed
       vm.isOpen = vm.isOpen || false;
 
+      // Set the default to be auto closed
+      vm.autoClose = vm.autoClose === undefined ? true : vm.autoClose;
+
       // Start the keyboard interaction at the first action
       resetActionIndex();
 
@@ -77,7 +80,7 @@
       }
 
       // If we focusout, set a timeout to close the element
-      if (event.type == 'focusout' && !closeTimeout) {
+      if (event.type == 'focusout' && vm.autoClose && !closeTimeout) {
         closeTimeout = $timeout(function() {
           vm.close();
         }, 100, false);
@@ -177,7 +180,7 @@
     }
 
     function checkForOutsideClick(event) {
-      if (event.target) {
+      if (event.target && vm.autoClose) {
         var closestTrigger = $mdUtil.getClosest(event.target, 'md-fab-trigger');
         var closestActions = $mdUtil.getClosest(event.target, 'md-fab-actions');
 
@@ -275,14 +278,17 @@
       return $mdUtil.getClosest(element, 'md-fab-actions');
     }
 
-    function handleItemClick(event) {
-      if (isTrigger(event.target)) {
-        vm.toggle();
-      }
+    function isClose(element) {
+      return $mdUtil.getClosest(element, 'md-fab-close');
+    }
 
-      if (isAction(event.target)) {
+    function handleItemClick(event) {
+      if (isClose(event.target))
         vm.close();
-      }
+      else if (isTrigger(event.target))
+        vm.toggle();
+      else if (isAction(event.target) && vm.autoClose)
+        vm.close();
     }
 
     function getTriggerElement() {

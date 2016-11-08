@@ -74,7 +74,7 @@
    *
    * @usage
    * <hljs lang="html">
-   * <md-fab-speed-dial md-direction="up" class="md-fling">
+   * <md-fab-speed-dial md-direction="up" md-auto-close="false" class="md-fling">
    *   <md-fab-trigger>
    *     <md-button aria-label="Add..."><md-icon md-svg-src="/img/icons/plus.svg"></md-icon></md-button>
    *   </md-fab-trigger>
@@ -101,7 +101,8 @@
 
       scope: {
         direction: '@?mdDirection',
-        isOpen: '=?mdOpen'
+        isOpen: '=?mdOpen',
+        autoClose: '=?mdAutoClose'
       },
 
       bindToController: true,

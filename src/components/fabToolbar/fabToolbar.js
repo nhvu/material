@@ -81,7 +81,8 @@
 
       scope: {
         direction: '@?mdDirection',
-        isOpen: '=?mdOpen'
+        isOpen: '=?mdOpen',
+        autoClose: '=?mdAutoClose'
       },
 
       bindToController: true,
