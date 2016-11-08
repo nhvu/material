@@ -118,7 +118,7 @@ function SliderContainerDirective() {
  * </hljs>
  * <h4>Discrete Mode</h4>
  * <hljs lang="html">
- * <md-slider md-discrete ng-model="myDiscreteValue" step="10" min="10" max="130">
+ * <md-slider md-discrete ng-model="myDiscreteValue" md-thumb-text="convertValue($value)" step="10" min="10" max="130">
  * </md-slider>
  * </hljs>
  * <h4>Invert Mode</h4>
@@ -136,7 +136,9 @@ function SliderContainerDirective() {
  */
 function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdTheming, $mdGesture, $parse, $log, $timeout) {
   return {
-    scope: {},
+    scope: {
+      mdThumbText: '&'
+    },
     require: ['?ngModel', '?^mdSliderContainer'],
     template:
       '<div class="md-slider-wrapper">' +
@@ -421,7 +423,10 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       scope.modelValue = ngModelCtrl.$viewValue;
       element.attr('aria-valuenow', ngModelCtrl.$viewValue);
       setSliderPercent(percent);
-      thumbText.text( ngModelCtrl.$viewValue );
+      if (scope.mdThumbText) 
+        thumbText.text(scope.mdThumbText({ $value: ngModelCtrl.$viewValue }));
+      else 
+        thumbText.text( ngModelCtrl.$viewValue );
     }
 
     function minMaxValidator(value, minValue, maxValue) {
@@ -548,7 +553,11 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       var exactVal = percentToValue( positionToPercent( x ));
       var closestVal = minMaxValidator( stepValidator(exactVal) );
       setSliderPercent( positionToPercent(x) );
-      thumbText.text( closestVal );
+
+      if (scope.mdThumbText) 
+        thumbText.text( scope.mdThumbText({$value: closestVal}));
+      else 
+        thumbText.text( closestVal );
     }
 
     /**
